@@ -18,6 +18,7 @@ jobs:
           --config "C:\Users\edu\Downloads\openvpn01-TCP4-1188-config.ovpn" `
           --auth-user-pass `
           --daemon
+          shell: pwsh  # PowerShell을 사용하여 명령어 실행
 
       - name: Deploy to GPU server
         run: |
