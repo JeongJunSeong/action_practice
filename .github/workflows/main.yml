@@ -14,8 +14,8 @@ jobs:
 
       - name: Start OpenVPN with Admin Rights
         run: |
-          Start-Process "C:\Program Files\OpenVPN\bin\openvpn.exe" -ArgumentList "--config", "C:\Users\edu\Downloads\openvpn01-TCP4-1188-config.ovpn", "--auth-user-pass", "C:\Users\edu\Downloads\vpn-auth.txt", "--daemon" -Verb RunAs
-        shell: pwsh
+          start "" "C:\Program Files\OpenVPN\bin\openvpn.exe" --config "C:\Users\edu\Downloads\openvpn01-TCP4-1188-config.ovpn" --auth-user-pass "C:\Users\edu\Downloads\vpn-auth.txt" --daemon
+        shell: cmd
 
 
       - name: Deploy to GPU server
