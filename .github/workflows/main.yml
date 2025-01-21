@@ -18,6 +18,8 @@ jobs:
       - name: Connect to VPN
         run: |
           & "C:\Program Files\OpenVPN\bin\openvpn.exe" "--config" "C:\Users\edu\Downloads\openvpn01-TCP4-1188-config.ovpn" "--daemon"
+          VPN_USERNAME: ${{ secrets.VPN_USERNAME }}
+          VPN_PASSWORD: ${{ secrets.VPN_PASSWORD }}
 
   # VPN 연결
       
