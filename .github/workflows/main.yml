@@ -20,11 +20,9 @@ jobs:
 
       - name: Deploy to GPU server
         run: |
-          ssh -i "C:\Users\edu\Downloads\jjs_490.pem" -p 32643 root@10.196.197.2 << EOF
-            # GPU 서버에서 작업 실행
-            cd /data/ephemeral/home
-            echo "Hello from GitHub Actions!" > github_actions_test.txt
-          EOF
+          ssh -i "C:\Users\edu\Downloads\jjs_490.pem" -p 32643 root@10.196.197.2 "cd /data/ephemeral/home && echo 'Hello from GitHub Actions!' > github_actions_test.txt"
+        shell: cmd
+          
 
       - name: Run tests
         run: |
