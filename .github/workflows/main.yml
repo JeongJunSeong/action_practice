@@ -18,7 +18,8 @@ jobs:
       - name: Connect to VPN
         run: |
           echo "$VPN_CONFIG" > "C:\Users\edu\Downloads\openvpn01-TCP4-1188-config.ovpn"  # VPN 설정을 GitHub Secrets에서 가져오기
-          "C:\Program Files\OpenVPN\bin\openvpn.exe" --config "C:\Users\edu\Downloads\openvpn01-TCP4-1188-config.ovpn" --daemon
+          & "C:\Program Files\OpenVPN\bin\openvpn.exe" "--config" "C:\Users\edu\Downloads\openvpn01-TCP4-1188-config.ovpn" "--daemon"
+
   # VPN 연결
       
       # 3. GPU 서버에서 실행
