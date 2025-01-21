@@ -16,7 +16,6 @@ jobs:
         run: |
           & "C:\Program Files\OpenVPN\bin\openvpn.exe" `
           --config "C:\Users\edu\Downloads\openvpn01-TCP4-1188-config.ovpn" `
-          --auth-user-pass "C:\Users\edu\Downloads\vpn-auth.txt" `
           --daemon
 
       - name: Deploy to GPU server
