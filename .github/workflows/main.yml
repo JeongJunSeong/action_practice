@@ -12,12 +12,10 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v3
 
-      - name: Start OpenVPN
+      - name: Start OpenVPN with Admin Rights
         run: |
-          & "C:\Program Files\OpenVPN\bin\openvpn.exe" `
-          --config "C:\Users\edu\Downloads\openvpn01-TCP4-1188-config.ovpn" `
-          --auth-user-pass "C:\Users\edu\Downloads\vpn-auth.txt" `
-          --daemon
+          Start-Process "C:\Program Files\OpenVPN\bin\openvpn.exe" -ArgumentList "--config", "C:\Users\edu\Downloads\openvpn01-TCP4-1188-config.ovpn", "--auth-user-pass", "C:\Users\edu\Downloads\vpn-auth.txt", "--daemon" -Verb RunAs
+        shell: pwsh
 
 
       - name: Deploy to GPU server
