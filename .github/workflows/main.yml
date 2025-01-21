@@ -18,7 +18,7 @@ jobs:
           --config "C:\Users\edu\Downloads\openvpn01-TCP4-1188-config.ovpn" `
           --auth-user-pass "C:\Users\edu\Downloads\vpn-auth.txt" `
           --daemon
-  
+
 
       - name: Deploy to GPU server
         run: |
