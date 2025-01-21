@@ -4,22 +4,13 @@ on:
   push:
     branches:
       - main  # main 브랜치에 코드가 푸시될 때 실행
+
 jobs:
   deploy:
     runs-on: self-hosted
     steps:
       - name: Check out repository
         uses: actions/checkout@v3
-
-      - name: Create VPN config
-        run: echo "$VPN_CONFIG" > "C:\Users\edu\Downloads\openvpn01-TCP4-1188-config.ovpn"
-        env:
-          VPN_CONFIG: ${{ secrets.VPN_CONFIG }}
-
-      - name: Create auth file
-        run: |
-          echo ${{ secrets.VPN_USERNAME }} > "C:\Users\edu\Downloads\vpn-auth.txt"
-          echo ${{ secrets.VPN_PASSWORD }} >> "C:\Users\edu\Downloads\vpn-auth.txt"
 
       - name: Start OpenVPN
         run: |
@@ -28,18 +19,14 @@ jobs:
           --auth-user-pass "C:\Users\edu\Downloads\vpn-auth.txt" `
           --daemon
 
-      
-      # 3. GPU 서버에서 실행
       - name: Deploy to GPU server
         run: |
-          ssh -i ${{ secrets.SSH_PRIVATE_KEY }} -p 32643 root@10.196.197.2 << EOF
+          ssh -i "C:\Users\edu\Downloads\jjs_490.pem" -p 32643 root@10.196.197.2 << EOF
             # GPU 서버에서 작업 실행
             cd /data/ephemeral/home
             echo "Hello from GitHub Actions!" > github_actions_test.txt
           EOF
 
-      # 4. 테스트 실행 (필요시 테스트를 수행)
       - name: Run tests
         run: |
           pytest tests/
-
