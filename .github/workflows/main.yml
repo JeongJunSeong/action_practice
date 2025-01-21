@@ -17,8 +17,9 @@ jobs:
       # 2. VPN 연결 (예: OpenVPN을 사용하여 VPN 연결)
       - name: Connect to VPN
         run: |
-          echo "$VPN_CONFIG" > /tmp/vpn_config.ovpn  # VPN 설정을 GitHub Secrets에서 가져오기
-          sudo openvpn --config /tmp/vpn_config.ovpn --daemon  # VPN 연결
+          echo "$VPN_CONFIG" > "C:\Users\edu\Downloads\openvpn01-TCP4-1188-config.ovpn"  # VPN 설정을 GitHub Secrets에서 가져오기
+          "C:\Program Files\OpenVPN\bin\openvpn.exe" --config "C:\Users\edu\Downloads\openvpn01-TCP4-1188-config.ovpn" --daemon
+  # VPN 연결
       
       # 3. GPU 서버에서 실행
       - name: Deploy to GPU server
