@@ -20,15 +20,13 @@ jobs:
           echo "$VPN_CONFIG" > /tmp/vpn_config.ovpn  # VPN 설정을 GitHub Secrets에서 가져오기
           sudo openvpn --config /tmp/vpn_config.ovpn --daemon  # VPN 연결
       
-      # 3. GPU 서버로 배포 (SSH를 통해 배포)
+      # 3. GPU 서버에서 실행
       - name: Deploy to GPU server
         run: |
           ssh -i ${{ secrets.SSH_PRIVATE_KEY }} -p 32643 root@10.196.197.2 << EOF
-            # GPU 서버에서 배포 작업 실행
+            # GPU 서버에서 작업 실행
             cd /data/ephemeral/home
-            # 예시로 배포 스크립트를 실행
-            ./deploy.sh
-            echo "배포 완료"  # 확인용
+            echo "Hello from GitHub Actions!" > github_actions_test.txt
           EOF
 
       # 4. 테스트 실행 (필요시 테스트를 수행)
