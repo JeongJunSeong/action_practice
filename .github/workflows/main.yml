@@ -13,7 +13,13 @@ jobs:
       # 1. 소스 코드 체크아웃
       - name: Checkout code
         uses: actions/checkout@v3
-
+        
+      # 2. VPN 연결 (예: OpenVPN을 사용하여 VPN 연결)
+      - name: Connect to VPN
+        run: |
+          echo "$VPN_CONFIG" > /tmp/vpn_config.ovpn  # VPN 설정을 GitHub Secrets에서 가져오기
+          sudo openvpn --config /tmp/vpn_config.ovpn --daemon  # VPN 연결
+      
       # 3. GPU 서버로 배포 (SSH를 통해 배포)
       - name: Deploy to GPU server
         run: |
