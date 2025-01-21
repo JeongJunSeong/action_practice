@@ -3,7 +3,7 @@ name: CI/CD Pipeline with VPN and Self-hosted Runner
 on:
   push:
     branches:
-      - master  # main 브랜치에 코드가 푸시될 때 실행
+      - main  # main 브랜치에 코드가 푸시될 때 실행
 
 jobs:
   deploy:
