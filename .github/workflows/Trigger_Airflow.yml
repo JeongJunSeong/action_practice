@@ -1,0 +1,16 @@
+name: Trigger Airflow DAG
+
+on:
+  workflow_dispatch:  # 수동으로 실행 가능
+
+jobs:
+  trigger-dag:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Trigger Airflow DAG
+        run: |
+          curl -X POST "http://<AIRFLOW_HOST>:8080/api/v1/dags/<DAG_ID>/dagRuns" \
+          -H "Content-Type: application/json" \
+          -u "admin:admin" \
+          -d '{"conf": {"key": "value"}}'
