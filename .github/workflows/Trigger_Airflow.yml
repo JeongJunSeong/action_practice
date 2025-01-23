@@ -10,7 +10,7 @@ jobs:
     steps:
       - name: Trigger Airflow DAG
         run: |
-          curl -X POST "172.18.0.3:8080/api/v1/dags/example_dag_decorator/dagRuns" \
+          curl -X POST "172.18.0.4:8080/api/v1/dags/example_dag_decorator/dagRuns" \
           -H "Content-Type: application/json" \
           -u "admin:admin" \
           -d '{"start_date": "2025-01-20"}'
