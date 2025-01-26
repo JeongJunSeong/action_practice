@@ -2,6 +2,11 @@ name: Build Docker
 
 on:
   push:
+    branches:
+      - 'main'                  # main 브랜치에서만 실행
+    paths:
+      - 'requirements.txt'      # requirements.txt 파일이 변경되었을 때
+      - 'Dockerfile'             # Dockerfile 파일이 변경되었을 때
   pull_request:
     branches:
       - 'main'                  # main 브랜치에서만 실행
