@@ -28,7 +28,10 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-docker-
             
-     # docker image 빌드
+      # docker image 빌드
       - name: Build docker image
         run: docker build -t my-airflow .
       
+      # 컨테이너 실행 및 테스트
+      - name: Run tests in Docker container
+        run: docker run --rm my-airflow pytest
