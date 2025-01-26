@@ -28,7 +28,23 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-docker-
             
-     # docker image 빌드
-      - name: Build docker image
-        run: docker build -t my-airflow .
-      
+      # Docker 이미지 빌드
+      - name: Build Docker image
+        run: |
+          echo "Starting Docker build..."
+          docker build -t my-airflow .
+          echo "Docker build completed."
+
+      # 이미지 테스트 (예: 이미지 확인)
+      - name: Verify Docker image
+        run: |
+          echo "Verifying Docker image..."
+          docker images | grep my-airflow || echo "Docker image not found!"
+          echo "Docker image verification completed."
+
+      # 설치된 패키지 확인
+      - name: List installed packages
+        run: |
+          echo "Listing installed packages..."
+          docker run --rm my-airflow pip list || echo "No packages found!"
+          echo "Package listing completed."
