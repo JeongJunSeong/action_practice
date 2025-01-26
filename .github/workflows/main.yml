@@ -12,12 +12,6 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v3
 
-      - name: Create auth-user-pass file from Secrets
-        run: |
-          echo "${{ secrets.VPN_USERNAME }}" > vpn-auth.txt
-          echo "${{ secrets.VPN_PASSWORD }}" >> vpn-auth.txt
-        shell: bash
-        
       - name: Start OpenVPN with Admin Rights
         run: |
           start "" "C:\Program Files\OpenVPN\bin\openvpn.exe" --config "C:\Users\openvpn01-TCP4-1188-config.ovpn" --auth-user-pass vpn-auth.txt --daemon
