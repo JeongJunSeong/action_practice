@@ -53,27 +53,3 @@ jobs:
           echo "Listing installed packages..."
           docker run --rm my-airflow pip list || echo "No packages found!"
           echo "Package listing completed."
-
-      # Airflow 컨테이너 실행
-      - name: Run Airflow container
-        run: |
-          docker run -d -p 8080:8080 --name my-airflow my-airflow
-          sleep 30  # Airflow가 시작될 때까지 기다리기
-
-      # Airflow DAG 트리거
-      - name: Trigger Airflow DAG
-        run: |
-          docker exec my-airflow airflow dags trigger recommend_dag
-          echo "DAG trigger completed."
-
-      # DAG 실행 상태 확인
-      - name: Verify DAG execution
-        run: |
-          docker exec my-airflow airflow tasks list recommend_dag
-          echo "DAG tasks listed."
-
-      # Docker 컨테이너 종료
-      - name: Clean up Docker container
-        run: |
-          docker stop my-airflow
-          
