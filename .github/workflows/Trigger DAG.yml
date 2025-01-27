@@ -26,4 +26,4 @@ jobs:
       - name: Trigger DAG in Airflow
         run: |
           docker exec my-airflow airflow dags trigger -d book_recommendation_pipeline || echo "Failed to trigger DAG."
-          echo "DAG triggered successfully."
+  
