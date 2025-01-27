@@ -1,0 +1,34 @@
+name: Trigger Airflow DAG on GPU Server
+
+on:
+  workflow_run:
+    workflows: ["Run Airflow Container on GPU Server"]  # 이전 워크플로 실행 후 트리거
+    types:
+      - completed  # "Run Airflow Container on GPU Server"가 완료되면 실행
+  workflow_dispatch:  # 수동으로 실행 가능
+
+jobs:
+  trigger-airflow-dag:
+    runs-on: self-hosted
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v3
+
+      # VPN 연결
+      - name: Start OpenVPN
+        run: |
+          echo "Starting VPN connection..."
+          start "" "C:\Program Files\OpenVPN\bin\openvpn.exe" --config "C:\Users\a9911\Downloads\openvpn01-TCP4-1188-config.ovpn" --auth-user-pass "C:\Users\a9911\Downloads\vpn-auth.txt" --daemon
+          echo "VPN connection started successfully."
+        shell: cmd
+
+      # Airflow DAG 트리거
+      - name: Trigger DAG in Airflow on GPU Server
+        run: |
+          ssh -i "C:\Users\a9911\Downloads\jjs_490.pem" -p 32643 root@10.196.197.2 "
+            echo 'Triggering Airflow DAG on GPU server...'
+            docker exec airflow airflow dags trigger -d book_recommendation_pipeline || echo 'Failed to trigger DAG.'
+          "
+          echo "DAG trigger process completed."
+        shell: cmd
