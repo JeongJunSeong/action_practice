@@ -1,0 +1,60 @@
+name: Build Docker on GPU Server
+
+on:
+  push:
+    branches:
+      - 'main'                  # main 브랜치에서만 실행
+    paths:
+      - 'requirements.txt'      # requirements.txt 파일이 변경되었을 때
+      - 'Dockerfile'             # Dockerfile 파일이 변경되었을 때
+  pull_request:
+    branches:
+      - 'main'                  # main 브랜치에서만 실행
+    paths:
+      - 'requirements.txt'      # requirements.txt 파일이 변경되었을 때
+      - 'Dockerfile'             # Dockerfile 파일이 변경되었을 때
+
+jobs:
+  build-docker:
+    runs-on: self-hosted
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v3
+
+      # VPN 연결
+      - name: Start OpenVPN
+        run: |
+          echo "Starting VPN connection..."
+          start "" "C:\Program Files\OpenVPN\bin\openvpn.exe" --config "C:\Users\a9911\Downloads\openvpn01-TCP4-1188-config.ovpn" --auth-user-pass "C:\Users\a9911\Downloads\vpn-auth.txt" --daemon
+          echo "VPN connection started successfully."
+        shell: cmd
+      
+      # Dockerfile, requirements.txt GPU 서버로 전송
+      - name: Copy Dockerfile and requirements.txt to GPU server
+        run: |
+          echo "Copying Dockerfile and requirements.txt to GPU server..."
+          scp -i "C:\Users\a9911\Downloads\jjs_490.pem" -P 32643 Dockerfile requirements.txt root@10.196.197.2:/data/ephemeral/home/airflow
+          echo "Files copied successfully to GPU server."
+        shell: cmd
+
+      # Docker Build on GPU server
+      - name: Build Docker Image on GPU Server
+        run: |
+          echo "Building Docker image on GPU server..."
+          ssh -i "C:\Users\a9911\Downloads\jjs_490.pem" -p 32643 root@10.196.197.2 "cd /data/ephemeral/home/airflow && docker build -t my_airflow ."
+          echo "Docker image built successfully on GPU server."
+        shell: cmd
+      
+      # Docker run on GPU server, 중복 실행 방지
+      - name: Run Docker Image on GPU Server
+        run: |
+          echo "Running Docker container on GPU server..."
+          ssh -i "C:\Users\a9911\Downloads\jjs_490.pem" -p 32643 root@10.196.197.2 "
+            docker ps -q --filter 'name=airflow' | grep -q . && \
+            (echo 'Stopping and removing existing container...' && docker stop airflow && docker rm airflow) || \
+            echo 'No existing container to stop.'
+            echo 'Starting new container...'
+            docker run -d --name airflow my_airflow
+          "
+          echo "Docker container is now running on GPU server."
+        shell: cmd
