@@ -1,0 +1,48 @@
+name: Run Airflow Container on GPU Server
+
+on:
+  workflow_run:
+    workflows: ["Build Docker on GPU Server"]  # Build_Docker_GPU 워크플로가 끝난 후 실행
+    types:
+      - completed  # Build Docker가 완료되면 실행
+  workflow_dispatch:  # 수동으로 실행 가능
+
+jobs:
+  run-airflow-container:
+    runs-on: self-hosted
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v3
+
+      # VPN 연결
+      - name: Start OpenVPN
+        run: |
+          echo "Starting VPN connection..."
+          start "" "C:\Program Files\OpenVPN\bin\openvpn.exe" --config "C:\Users\a9911\Downloads\openvpn01-TCP4-1188-config.ovpn" --auth-user-pass "C:\Users\a9911\Downloads\vpn-auth.txt" --daemon
+          echo "VPN connection started successfully."
+        shell: cmd
+
+      # Docker run on GPU server, 중복 실행 방지
+      - name: Run or Verify Docker Image on GPU Server
+        run: |
+          ssh -i "C:\Users\a9911\Downloads\jjs_490.pem" -p 32643 root@10.196.197.2 "
+            if docker ps -q --filter 'name=airflow' | grep -q .; then
+              echo 'Airflow container is already running.'
+            else
+              echo 'No running container found. Starting a new one...'
+              docker run -d --name airflow my_airflow
+            fi
+            echo 'Verifying container status...'
+            docker ps -a | grep airflow || echo 'Airflow container not found!'
+          "
+        shell: cmd
+
+      # GPU 서버에서 Airflow DAGs 목록 확인
+      - name: List Airflow DAGs on GPU Server
+        run: |
+          ssh -i "C:\Users\a9911\Downloads\jjs_490.pem" -p 32643 root@10.196.197.2 "
+            docker exec my-airflow airflow dags list || echo 'Failed to list DAGs.' &&
+            echo 'Airflow DAGs listed.'
+          "
+        shell: cmd
