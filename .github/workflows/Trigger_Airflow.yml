@@ -1,4 +1,4 @@
-name: Trigger Airflow DAG
+name: Trigger Airflow DAG NOT USE
 
 on:
   workflow_dispatch:  # 수동으로 실행 가능
