@@ -24,10 +24,10 @@ jobs:
 
       # Docker Hub에서 이미지 가져오기
       - name: Run Airflow container from Docker Hub
-      run: |
-        docker pull ${{ secrets.DOCKER_USERNAME }}/my-airflow  
-        docker run -d -p 8080:8080 --name my-airflow ${{ secrets.DOCKER_USERNAME }}/my-airflow
-        sleep 30
+        run: |
+          docker pull ${{ secrets.DOCKER_USERNAME }}/my-airflow  
+          docker run -d -p 8080:8080 --name my-airflow ${{ secrets.DOCKER_USERNAME }}/my-airflow
+          sleep 30
 
       # Airflow 컨테이너 상태 확인
       - name: Verify Airflow container
