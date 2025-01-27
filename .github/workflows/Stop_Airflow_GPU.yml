@@ -1,0 +1,21 @@
+name: Stop Airflow Container on GPU Server
+
+on:
+  workflow_dispatch:           # 수동으로 실행
+
+jobs:
+  stop-airflow-container:
+    runs-on: self-hosted     
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # GPU Airflow 컨테이너 종료
+      - name: Stop Airflow container on GPU server
+        run: |
+          ssh -i "C:\Users\a9911\Downloads\jjs_490.pem" -p 32643 root@10.196.197.2 "
+            docker stop my-airflow || echo 'Airflow container not found!'
+            echo 'Airflow container stopped.'
+          "
+        shell: cmd
