@@ -26,4 +26,11 @@ jobs:
       - name: Trigger DAG in Airflow
         run: |
           docker exec my-airflow airflow dags trigger -d book_recommendation_pipeline || echo "Failed to trigger DAG."
-  
+
+      # 로그 가져오기 (DAG 실행 로그 예시)
+      - name: Fetch logs for DAG task
+        run: |
+          docker exec my-airflow airflow logs book_recommendation_pipeline task_name --start-date 2025-01-01 --end-date 2025-01-02
+          echo "Logs fetched successfully."
+
+          
