@@ -1,5 +1,4 @@
-name: Trigger Airflow DAG on GPU Server
-
+name: Trigger NOT USE
 on:
   workflow_run:
     workflows: ["Run Airflow Container on GPU Server"]  # 이전 워크플로 실행 후 트리거
