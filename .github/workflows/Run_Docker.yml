@@ -1,0 +1,28 @@
+name: Run Airflow Container
+
+on:
+  workflow_run:
+    workflows: ["Build Docker"]  # Build_Docker.yml이 끝난 후 실행
+    types:
+      - completed  # Build Docker가 완료되면 실행
+  workflow_dispatch:           # 수동으로 실행
+
+jobs:
+  run-airflow-container:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Airflow 컨테이너 실행
+      - name: Run Airflow container
+        run: |
+          docker run -d -p 8080:8080 --name my-airflow my-airflow
+          sleep 30  # Airflow가 시작될 때까지 기다리기
+
+      # Airflow 컨테이너 상태 확인
+      - name: Verify Airflow container
+        run: |
+          docker ps -a | grep my-airflow || echo "Airflow container not found!"
+          echo "Airflow container is running."
