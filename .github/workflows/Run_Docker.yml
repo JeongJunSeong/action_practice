@@ -34,3 +34,9 @@ jobs:
         run: |
           docker ps -a | grep my-airflow || echo "Airflow container not found!"
           echo "Airflow container is running."
+
+      # Airflow DAGs 목록 확인
+      - name: List Airflow DAGs
+        run: |
+          docker exec my-airflow airflow dags list || echo "Failed to list DAGs."
+          echo "Airflow DAGs listed."
