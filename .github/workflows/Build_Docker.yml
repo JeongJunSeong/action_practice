@@ -60,11 +60,3 @@ jobs:
           docker images | grep adminer || echo "adminer not found!"
           docker images | grep mariadb || echo "mariadb not found!"
           echo "Docker image verification completed."
-
-
-      # 설치된 패키지 확인
-      - name: List installed packages
-        run: |
-          echo "Listing installed packages..."
-          docker run --rm my-airflow pip list || echo "No packages found!"
-          echo "Package listing completed."
