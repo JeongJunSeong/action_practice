@@ -47,21 +47,6 @@ jobs:
           docker-compose build 
           echo "Docker Compose build completed."
 
-      # Docker Hub 로그인
-      - name: Log in to Docker Hub
-        uses: docker/login-action@v2
-        with:
-          username: ${{ secrets.DOCKER_USERNAME }}  # GitHub Secrets에 저장된 Docker Hub username
-          password: ${{ secrets.DOCKER_PASSWORD }}  # GitHub Secrets에 저장된 Docker Hub password or token
-
-      # Docker 이미지 푸시
-      - name: Push Docker image to Docker Hub
-        run: |
-          echo "Pushing Docker image to Docker Hub..."
-          docker tag my-airflow ${{ secrets.DOCKER_USERNAME }}/my-airflow:latest  # 이미지에 태그를 추가
-          docker push ${{ secrets.DOCKER_USERNAME }}/my-airflow:latest  # Docker Hub에 푸시
-          echo "Docker image pushed successfully."
-
       # 이미지 테스트 (예: 이미지 확인)
       - name: Verify Docker image
         run: |
