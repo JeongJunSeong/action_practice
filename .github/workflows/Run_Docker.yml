@@ -15,28 +15,28 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # Docker Hub 로그인
-      - name: Log in to Docker Hub
-        uses: docker/login-action@v2
-        with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
-
-      # Docker Hub에서 이미지 가져오기
-      - name: Run Airflow container from Docker Hub
+      # Docker Compose 설치 (필요한 경우)
+      - name: Set up Docker Compose
         run: |
-          docker pull ${{ secrets.DOCKER_USERNAME }}/my-airflow  
-          docker run -d -p 8080:8080 --name my-airflow ${{ secrets.DOCKER_USERNAME }}/my-airflow
-          sleep 30
+          sudo apt-get update
+          sudo apt-get install -y docker-compose
 
-      # Airflow 컨테이너 상태 확인
-      - name: Verify Airflow container
+      # Docker Compose로 Airflow 컨테이너 실행
+      - name: Run Airflow container using Docker Compose
         run: |
-          docker ps -a | grep my-airflow || echo "Airflow container not found!"
-          echo "Airflow container is running."
+          # docker-compose.yaml 파일이 있는 디렉토리로 이동
+          cd action_practice
+          docker-compose up -d  # 컨테이너 실행
+          sleep 30  # 컨테이너가 정상적으로 실행되도록 대기
+
+      # 모든 컨테이너 상태 확인
+      - name: Verify all containers
+        run: |
+          docker ps -a  # 모든 컨테이너 상태 출력
+          echo "All containers are listed."
 
       # Airflow DAGs 목록 확인
       - name: List Airflow DAGs
         run: |
-          docker exec my-airflow airflow dags list || echo "Failed to list DAGs."
+          docker exec airflow-airflow-webserver-1 airflow dags list || echo "Failed to list DAGs."
           echo "Airflow DAGs listed."
