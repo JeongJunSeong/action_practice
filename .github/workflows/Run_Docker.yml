@@ -24,6 +24,7 @@ jobs:
       # Docker Compose로 Airflow 컨테이너 실행
       - name: Run Airflow container using Docker Compose
         run: |
+          docker network create mlops_network  # network create
           docker-compose up -d  # 컨테이너 실행
           sleep 30  # 컨테이너가 정상적으로 실행되도록 대기
 
