@@ -21,18 +21,9 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y docker-compose
 
-      - name: Show current directory
-        run: |
-          echo "Current Directory:"
-          pwd
-          echo "Listing Files:"
-          ls -al
-
       # Docker Compose로 Airflow 컨테이너 실행
       - name: Run Airflow container using Docker Compose
         run: |
-          # docker-compose.yaml 파일이 있는 디렉토리로 이동
-          cd action_practice
           docker-compose up -d  # 컨테이너 실행
           sleep 30  # 컨테이너가 정상적으로 실행되도록 대기
 
