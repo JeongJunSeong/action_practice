@@ -47,12 +47,20 @@ jobs:
           docker-compose build 
           echo "Docker Compose build completed."
 
-      # 이미지 테스트 (예: 이미지 확인)
-      - name: Verify Docker image
+      # 이미지 확인
+      - name: Verify Docker images
         run: |
-          echo "Verifying Docker image..."
-          docker images | grep my-airflow || echo "Docker image not found!"
+          echo "Verifying Docker images..."
+          docker images | grep airflow-airflow-webserver || echo "airflow-airflow-webserver not found!"
+          docker images | grep airflow-airflow-triggerer || echo "airflow-airflow-triggerer not found!"
+          docker images | grep airflow-airflow-worker || echo "airflow-airflow-worker not found!"
+          docker images | grep airflow-airflow-scheduler || echo "airflow-airflow-scheduler not found!"
+          docker images | grep airflow-airflow-init || echo "airflow-airflow-init not found!"
+          docker images | grep redis || echo "redis not found!"
+          docker images | grep adminer || echo "adminer not found!"
+          docker images | grep mariadb || echo "mariadb not found!"
           echo "Docker image verification completed."
+
 
       # 설치된 패키지 확인
       - name: List installed packages
