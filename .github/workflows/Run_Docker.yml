@@ -22,7 +22,8 @@ jobs:
           sudo apt-get install -y docker-compose
 
       - name: Show current directory
-        run: echo "Current Directory:"
+        run: |
+          echo "Current Directory:"
           pwd
           echo "Listing Files:"
           ls -al
