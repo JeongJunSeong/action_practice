@@ -37,5 +37,6 @@ jobs:
       # Airflow DAGs 목록 확인
       - name: List Airflow DAGs
         run: |
-          docker exec airflow-airflow-webserver-1 airflow dags list || echo "Failed to list DAGs."
+          docker exec action_practice_airflow-webserver_1 airflow dags list || echo "Failed to list DAGs."
           echo "Airflow DAGs listed."
+
