@@ -7,12 +7,14 @@ on:
     paths:
       - 'requirements.txt'      # requirements.txt 파일이 변경되었을 때
       - 'Dockerfile'             # Dockerfile 파일이 변경되었을 때
+      - 'docker-compose.yaml'    # docker-compose.yaml 파일이 변경되었을 때
   pull_request:
     branches:
       - 'main'                  # main 브랜치에서만 실행
     paths:
       - 'requirements.txt'      # requirements.txt 파일이 변경되었을 때
       - 'Dockerfile'             # Dockerfile 파일이 변경되었을 때
+      - 'docker-compose.yaml'    # docker-compose.yaml 파일이 변경되었을 때
   
 jobs:
   build-docker:
@@ -25,20 +27,25 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
       
+      - name: Set up Docker Compose
+        run: |
+          sudo apt-get update
+          sudo apt-get install docker-compose
+      
       - name: Cache Docker layers
         uses: actions/cache@v3
         with:
           path: ~/.cache/docker
-          key: ${{ runner.os }}-docker-${{ hashFiles('**/Dockerfile', '**/requirements.txt') }}
+          key: ${{ runner.os }}-docker-${{ hashFiles('**/Dockerfile', '**/requirements.txt', '**/docker-compose.yaml') }}
           restore-keys: |
             ${{ runner.os }}-docker-
             
       # Docker 이미지 빌드
-      - name: Build Docker image
+      - name: Build Docker image using Docker Compose
         run: |
-          echo "Starting Docker build..."
-          docker build -t my-airflow .
-          echo "Docker build completed."
+          echo "Starting Docker Compose build..."
+          docker-compose build 
+          echo "Docker Compose build completed."
 
       # Docker Hub 로그인
       - name: Log in to Docker Hub
