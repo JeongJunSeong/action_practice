@@ -37,6 +37,7 @@ jobs:
       # Airflow DAGs 목록 확인
       - name: List Airflow DAGs
         run: |
+          sleep 30  # 30초 대기
           docker exec action_practice_airflow-webserver_1 airflow dags list || echo "Failed to list DAGs."
           echo "Airflow DAGs listed."
 
