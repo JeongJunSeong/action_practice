@@ -1,19 +1,43 @@
-FROM python:3.8-slim
+# Python 3.9 기반의 Airflow 공식 이미지 사용
+FROM apache/airflow:2.7.2-python3.9
 
-ENV AIRFLOW_HOME=/usr/local/airflow
+# 루트 사용자로 전환
+USER root
 
-# requirements.txt 복사
-COPY requirements.txt $AIRFLOW_HOME/requirements.txt
+RUN apt-get update && apt-get install -y \
+    gcc \
+    pkg-config \
+    libmariadb-dev
 
-RUN pip install apache-airflow && \
-    pip install --no-cache-dir -r $AIRFLOW_HOME/requirements.txt
+# airflow 사용자로 돌아가기
+USER airflow
 
-RUN mkdir -p $AIRFLOW_HOME
-WORKDIR $AIRFLOW_HOME
+# login 정보
+COPY .env /opt/airflow/.env
+# variable 정보
+COPY variables.json /opt/airflow/config/variables.json
+
+# 패키지 다운로드
+COPY requirements.txt /opt/airflow/requirements.txt
+
+RUN pip install --no-cache-dir -r /opt/airflow/requirements.txt
+RUN pip install --no-cache-dir apache-airflow-providers-openlineage==1.8.0
+
+# 작업 디렉토리와 기타 필요한 파일들 복사
+COPY ./dags /opt/airflow/dags
+COPY ./models /opt/airflow/models
+COPY ./support /opt/airflow/support
+
 RUN airflow db init
-
-COPY recommend_dag.py $AIRFLOW_HOME/dags/
 
 EXPOSE 8080
 
+# variable 등록
+RUN airflow variables import /opt/airflow/config/variables.json
+
+# connection 정보
+ENV AIRFLOW_CONN_BOOK_DB='mysql://user:password@host:3306/dbname'
+
+
 CMD airflow webserver -p 8080 & airflow scheduler
+
