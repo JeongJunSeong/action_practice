@@ -14,14 +14,13 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-
+      
       # Airflow DAG 트리거
       - name: Trigger DAG in Airflow
         run: |
-          docker exec airflow_airflow_webserver_1 airflow dags trigger -d book_mlops || echo "Failed to trigger DAG."
+          docker exec action_practice_airflow-webserver_1 airflow dags trigger -d book_mlops || echo "Failed to trigger DAG."
 
-      
       # 로그 출력
       - name: Fetch Airflow logs
         run: |
-          docker logs airflow_airflow_webserver_1 2>&1 | grep "Recommended books" || echo "Log message not found"
+          docker logs action_practice_airflow-webserver_1 2>&1 | grep "Recommended books" || echo "Log message not found"
